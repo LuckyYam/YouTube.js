@@ -37,13 +37,13 @@ export default class Player {
       throw new PlayerError('Failed to get player id');
 
     // We have the player id, now we can check if we have a cached player.
-    if (cache) {
+    /*if (cache) {
       const cached_player = await Player.fromCache(cache, player_id);
       if (cached_player) {
         Log.info(TAG, 'Found up-to-date player data in cache.');
         return cached_player;
       }
-    }
+    }*/
 
     const player_url = new URL(`/s/player/${player_id}/player_ias.vflset/en_US/base.js`, Constants.URLS.YT_BASE);
 

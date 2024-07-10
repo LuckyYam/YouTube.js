@@ -63,11 +63,11 @@ pnpm-lock.yaml
 tmp/
 
 # Build output
-dist/
-bundle/*.js.*
-bundle/*.js
-bundle/*.cjs
-bundle/*.cjs.*
+#dist/
+#bundle/*.js.*
+#bundle/*.js
+#bundle/*.cjs
+#bundle/*.cjs.*
 deno/
 
 # VSCode files
