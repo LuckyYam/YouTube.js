@@ -169,15 +169,11 @@ export default class Player {
         return `function descramble_sig(a) { a = a.split(""); let ${obj_name}={${functions}}${calls} return a.join("") } descramble_sig(sig);`;
     }
     static extractNSigSourceCode(data) {
-        let sc = getStringBetweenStrings(data, 'b=a.split("")', '}return b.join("")}');
-        if (sc)
-            return `function descramble_nsig(a) { let b=a.split("")${sc}} return b.join(""); } descramble_nsig(nsig)`;
-        sc = getStringBetweenStrings(data, 'b=String.prototype.split.call(a,"")', '}return Array.prototype.join.call(b,"")}');
-        if (sc)
-            return `function descramble_nsig(a) { let b=String.prototype.split.call(a, "")${sc}} return Array.prototype.join.call(b, ""); } descramble_nsig(nsig)`;
-        // We really should throw an error here to avoid errors later, returning a pass-through function for backwards-compatibility
-        Log.warn(TAG, 'Failed to extract n-token decipher algorithm');
-        return 'function descramble_nsig(a) { return a; } descramble_nsig(nsig)';
+        const match = data.match(/b=(?:a\.split\(|String\.prototype\.split\.call\(a,)""\).*?\}return (?:b\.join\(|Array\.prototype\.join\.call\(b,)""\)\}/s);
+        if (!match) {
+            throw new PlayerError('Failed to extract n-token decipher algorithm');
+        }
+        return `function descramble_nsig(a) { let ${match[0]} descramble_nsig(nsig)`;
     }
     get url() {
         return new URL(`/s/player/${this.player_id}/player_ias.vflset/en_US/base.js`, Constants.URLS.YT_BASE).toString();
